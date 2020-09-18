@@ -22,7 +22,6 @@ def new_post(request):
     if request.method == 'POST':
         form = PostForm(request.POST or None)
         if form.is_valid():
-           
             post = form.save(commit=False)
             post.author = request.user
             post.save()
