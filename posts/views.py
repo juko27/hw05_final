@@ -19,14 +19,12 @@ def group_posts(request, slug):
                   {"group": group, "posts": posts})
 
 def new_post(request):
+    form = PostForm(request.POST or None)
     if request.method == 'POST':
-        form = PostForm(request.POST or None)
         if form.is_valid():
-           
             post = form.save(commit=False)
             post.author = request.user
             post.save()
             return redirect('index')
-        return render(request, 'new_post.html', {'form': form})
     form = PostForm()
     return render(request, 'new_post.html', {'form': form})
