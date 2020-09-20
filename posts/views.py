@@ -26,5 +26,4 @@ def new_post(request):
             post.author = request.user
             post.save()
             return redirect('index')
-    form = PostForm()
     return render(request, 'new_post.html', {'form': form})
