@@ -19,7 +19,7 @@ def group_posts(request, slug):
                   "group.html", 
                   {"group": group, "posts": posts})
                   
-@login_required
+@login_required(redirect_field_name='signup')
 def new_post(request):
     form = PostForm(request.POST or None)
     if request.method == 'POST':
