@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from .models import Post, Group
 from .forms import PostForm
 from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required
 
 
 def index(request):
@@ -17,7 +18,8 @@ def group_posts(request, slug):
     return render(request, 
                   "group.html", 
                   {"group": group, "posts": posts})
-
+                  
+@login_required
 def new_post(request):
     form = PostForm(request.POST or None)
     if request.method == 'POST':
@@ -26,5 +28,4 @@ def new_post(request):
             post.author = request.user
             post.save()
             return redirect('index')
-    form = PostForm()
     return render(request, 'new_post.html', {'form': form})
