@@ -20,13 +20,14 @@ class Post(models.Model):
     class Meta:
         ordering = ("-pub_date",)
         
-    text = models.TextField()
+    text = models.TextField(verbose_name="Текст")
     pub_date = models.DateTimeField("date published", 
                                     auto_now_add=True)
     author = models.ForeignKey(User, 
                                on_delete=models.CASCADE, 
                                related_name="posts")
     group = models.ForeignKey(Group,
+                              verbose_name="Группа",
                               on_delete=models.SET_NULL, 
                               related_name="posts",
                               blank=True, null=True)
