@@ -13,7 +13,12 @@ SECRET_KEY = '5=bgoip!-e24gxsbs#ud%af!u#wb0jk8lw!&utavdv1%ckdd4u'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+        "localhost",
+        "127.0.0.1",
+        "[::1]",
+        "testserver",
+]
 
 
 # Application definition
@@ -27,6 +32,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django.contrib.flatpages',
 ]
 
 MIDDLEWARE = [
@@ -42,6 +49,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'yatube.urls'
 LOGIN_URL = "/auth/login/"
 LOGIN_REDIRECT_URL = "index" 
+SITE_ID = 1 
 
 
 TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
