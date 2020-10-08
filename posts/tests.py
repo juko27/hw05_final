@@ -10,7 +10,8 @@ class TestRegMethods(TestCase):
     def setUp(self):
         self.client = Client()
         self.user = User.objects.create_user(
-                username="user_name", password="pass_word"
+                username="user_name", 
+                password="pass_word"
         )
         self.client.force_login(self.user)
         self.logout_user = Client()
@@ -41,8 +42,16 @@ class TestPostMethods(TestCase):
                 username="user_name", password="pass_word"
         )
         self.client.force_login(self.user)
-        self.group = Group.objects.create(title="Group", description="description", slug = "group")
-        self.post = Post.objects.create(text="Text", author=self.user, group=self.group)
+        self.group = Group.objects.create(
+            title="Group", 
+            description="description", 
+            slug = "group"
+        )
+        self.post = Post.objects.create(
+            text="Text", 
+            author=self.user, 
+            group=self.group
+        )
         
     def post_view(self, url, post = None):
         if post is None: post = self.post
