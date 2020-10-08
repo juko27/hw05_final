@@ -59,6 +59,7 @@ def profile(request, username):
                         'paginator': paginator
                     })
 
+
 def post_exist(fn):
     def post_check(request, username, post_id):
         try:
@@ -67,31 +68,27 @@ def post_exist(fn):
             return redirect('profile', username)
     return post_check
 
+
 @post_exist
 def post_view(request, username, post_id):
         profile = get_object_or_404(User, username=username)
-        posts = profile.posts.all()
+        posts_len = profile.posts.all().count()
         post = Post.objects.get(id=post_id)
-        if post not in posts:
+        if profile != post.author:
             return redirect('profile', profile.username)
         return render(request, 'post.html', {'post': post, 
-                      'profile': profile, 'posts': posts})
+                      'profile': profile, 'posts': posts_len})
+
 
 @post_exist
 def post_edit(request, username, post_id):
-    user = request.user
     author = get_object_or_404(User, username=username)
     post = Post.objects.get(id=post_id)
-
-    if post not in author.posts.all() or user.id != post.author_id:   
+    if request.user != author:   
         return redirect('post', post.author, post_id)
+    form = PostForm(request.POST, instance=post)
     if request.method == 'POST':
-        form = PostForm(request.POST, instance=post)
         if form.is_valid():
             form.save()
-            return redirect('post', username = username, 
-                                    post_id = post_id)
-    else:
-        form = PostForm(instance=post)
-    
+            return redirect('post', username=username, post_id=post_id)
     return render(request, 'new_post.html', {'post': post, 'form': form}) 

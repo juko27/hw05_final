@@ -13,7 +13,11 @@
     <div class="card-header">
       Новая запись
     </div>
-    <form method="post" action="{% url 'new' %}">
+    {% if post.id %}
+        <form method="post" action="{% url 'post_edit' request.user post.id %}">
+    {% else %}
+        <form method="post" action="{% url 'new' %}">
+    {% endif %} 
         {% csrf_token %}
         <div class="card-body">
                 {% for field in form %}
