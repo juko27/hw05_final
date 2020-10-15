@@ -31,3 +31,29 @@ class Post(models.Model):
                               on_delete=models.SET_NULL, 
                               related_name="posts",
                               blank=True, null=True)
+    image = models.ImageField(upload_to='posts/', 
+                              blank=True, 
+                              null=True)  
+
+
+class Comment(models.Model):
+    post =  models.ForeignKey(Post,
+                              on_delete=models.CASCADE,
+                              related_name="comments",
+                              blank=True, null=True)
+    author = models.ForeignKey(User, 
+                               on_delete=models.CASCADE, 
+                               related_name="comments")
+    text = models.TextField()
+    created = models.DateTimeField("created at", 
+                                    auto_now_add=True)
+
+                                
+class Follow(models.Model):
+    user =  models.ForeignKey(User, 
+                               on_delete=models.CASCADE, 
+                               related_name="follower")
+    author = models.ForeignKey(User, 
+                               on_delete=models.CASCADE, 
+                               related_name="following")
+    

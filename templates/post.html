@@ -19,14 +19,14 @@
                         <ul class="list-group list-group-flush">
                                 <li class="list-group-item">
                                         <div class="h6 text-muted">
-                                        Подписчиков: XXX <br />
-                                        Подписан: XXX
+                                            <!-- Количество записей -->
+                                            Опубликовано: {{ post.pub_date }}
                                         </div>
                                 </li>
                                 <li class="list-group-item">
                                         <div class="h6 text-muted">
                                             <!-- Количество записей -->
-                                            Записей: {{ posts | length }}
+                                            Комментариев: ({{ post.comments.count }})
                                         </div>
                                 </li>
                         </ul>
@@ -35,31 +35,16 @@
 
         <div class="col-md-9">
 
-            <!-- Пост -->  
-                <div class="card mb-3 mt-1 shadow-sm">
-                        <div class="card-body">
-                                <p class="card-text">
-                                        <!-- Ссылка на страницу автора в атрибуте href; username автора в тексте ссылки -->
-                                        <a href="{% url 'profile' profile.username %}"><strong class="d-block text-gray-dark">@{{ profile.username }}</strong></a>
-                                        <!-- Текст поста -->
-                                        <p>{{ post.text }}</p>
-                                </p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                        <div class="btn-group ">
-                                                <!-- Ссылка на редактирование, показывается только автору записи -->
-                                                {%if request.user.id == post.author_id%}
-                                                        <a class="btn btn-sm text-muted" 
-                                                        href="{% url 'post_edit' profile.username post.pk %}" 
-                                                        role="button">Редактировать</a>
-                                                {% endif %}
-                                        </div>
-                                        
-                                        <!-- Дата публикации  -->
-                                        <small class="text-muted">{{ post.pub_date|date:"d M Y" }}</small>
-                                </div>
-                        </div>
-                </div>
+            <!-- Пост -->
+                {% include "post_item.html" with post=post %} 
+                {% include "comments.html" with post=post %}
+            </div>
+
+
+
+            
      </div>
+
     </div>
 </main>
 

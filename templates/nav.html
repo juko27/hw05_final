@@ -3,20 +3,26 @@
 <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
     <a class="navbar-brand" href="/">
         <img alt="Brand" class="img-responsive" width="140" src="{% static 'logo3.png' %}"> 
-        <!-- <link rel="Brand" href="{% static 'logo.png' %}"> -->
     </a>
     <nav class="my-2 my-md-0 mr-md-4">
         {% if user.is_authenticated %}
         Пользователь: {{ user.username }}
         
         <span>
-            <link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans&display=swap" 
+            <link href="https://fonts.googleapis.com/css2?family=Ruslan+Display&display=swap" 
             rel="stylesheet">
             <style type="text/css">
-                span {font-family: 'Balsamiq Sans', cursive;
+                nav {font-family: 'Ruslan Display', cursive;
                       font-size: 22px}
             </style>
-            <a class="badge badge-pill badge-dark"  href="{% url 'new' %}">Новая запись</a>
+            
+            <a class="badge badge-pill badge-dark"  href="{% url 'new' %}">
+              <svg width="1em" height="1.2em" viewBox="0 0 16 16" 
+              class="bi bi-pencil-fill" fill="currentColor" 
+              xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" 
+                d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
+              </svg> Новая запись</a>
         </span>
         
         <a class="p-2 text-dark" href="{% url 'password_change' %}">Изменить пароль</a>
