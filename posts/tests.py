@@ -6,6 +6,7 @@ from django.urls import reverse
 from .models import Post, Group
 import time
 
+
 class TestRegMethods(TestCase):
 
     def setUp(self):
