@@ -158,7 +158,6 @@ def follow_index(request):
                         'paginator': paginator
                         }) 
 
-<<<<<<< HEAD
 
 @login_required
 def profile_follow(request, username):
@@ -174,38 +173,3 @@ def profile_unfollow(request, username):
     unfollow = Follow.objects.get(user = request.user, author__username=username)
     unfollow.delete()
     return redirect('profile', username)
-=======
-
-def post_exist(fn):
-    def post_check(request, username, post_id):
-        try:
-            return fn(request, username, post_id)
-        except Post.DoesNotExist:
-            return redirect('profile', username)
-    return post_check
-
-
-@post_exist
-def post_view(request, username, post_id):
-        profile = get_object_or_404(User, username=username)
-        posts_len = profile.posts.all().count()
-        post = Post.objects.get(id=post_id)
-        if profile != post.author:
-            return redirect('profile', profile.username)
-        return render(request, 'post.html', {'post': post, 
-                      'profile': profile, 'posts': posts_len})
-
-
-@post_exist
-def post_edit(request, username, post_id):
-    author = get_object_or_404(User, username=username)
-    post = Post.objects.get(id=post_id)
-    if request.user != author:   
-        return redirect('post', post.author, post_id)
-    form = PostForm(request.POST, instance=post)
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            return redirect('post', username=username, post_id=post_id)
-    return render(request, 'new_post.html', {'post': post, 'form': form}) 
->>>>>>> caec63caee2c86f618678ac33916de06e5a95b81

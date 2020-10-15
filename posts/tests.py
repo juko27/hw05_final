@@ -4,11 +4,7 @@ from django.contrib.auth.models import User
 from django.core.cache import cache 
 from django.urls import reverse
 from .models import Post, Group
-<<<<<<< HEAD
 import time
-=======
-
->>>>>>> caec63caee2c86f618678ac33916de06e5a95b81
 
 class TestRegMethods(TestCase):
 
@@ -57,7 +53,6 @@ class TestPostMethods(TestCase):
             author=self.user, 
             group=self.group
         )
-<<<<<<< HEAD
         
     def post_view(self, url, post = None):
         cache.clear()
@@ -69,18 +64,6 @@ class TestPostMethods(TestCase):
             res = self.response.context["post"]
         return self.assertEqual(res, post)
         
-=======
-        
-    def post_view(self, url, post = None):
-        if post is None: post = self.post
-        self.response = self.client.get(url)
-        if self.response.context.get("paginator"):
-            res = self.response.context["paginator"].object_list[0]
-        else:
-            res = self.response.context["post"]
-        return self.assertEqual(res, post)
-        
->>>>>>> caec63caee2c86f618678ac33916de06e5a95b81
     def test_new_post_in_pages(self):
         self.post_view("/")
         self.post_view(f"/{self.user.username}/")
@@ -91,7 +74,6 @@ class TestPostMethods(TestCase):
         response = self.client.post(f"/{self.user.username}/{self.post.id}/edit/", 
             {'text': 'New text', 'group': self.group})
         post = Post.objects.get(id = self.post.id )
-<<<<<<< HEAD
 
         self.post_view("/", post)
         self.post_view(f"/{self.user.username}/", post)
@@ -146,9 +128,3 @@ class TestImageAndCacheMethods(TestCase):
         response_cache = self.client.get(reverse('index'))
         res2 = time.time() - start_cache
         self.assertTrue(res2 < res1)
-=======
-
-        self.post_view("/", post)
-        self.post_view(f"/{self.user.username}/", post)
-        self.post_view(f"/{self.user.username}/{self.post.id}/", post)
->>>>>>> caec63caee2c86f618678ac33916de06e5a95b81
