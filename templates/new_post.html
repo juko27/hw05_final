@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "base.html" %} 
 {% block title %} 
     {% if post.id %} 
@@ -54,3 +55,59 @@
 </div> 
  
 {% endblock %} 
+=======
+{% extends "base.html" %}
+{% block title %}
+    {% if post.id %}
+        Редактировать запись
+    {% else %}
+        Добавить запись
+    {% endif %}
+{% endblock %}
+{% block content %}
+{% load user_filters %}
+
+<div class="card">
+    <div class="card-header">
+      Новая запись
+    </div>
+    {% if post.id %}
+        <form method="post" action="{% url 'post_edit' request.user post.id %}">
+    {% else %}
+        <form method="post" action="{% url 'new' %}">
+    {% endif %} 
+        {% csrf_token %}
+        <div class="card-body">
+                {% for field in form %}
+
+                <div class="form-group row">
+                    <label for="{{ field.id_for_label }}" 
+                        class="col-md-2 col-form-label text-md-right">
+                        {{ field.label }}
+                    </label>
+                    <div class="col-md-9">
+                        {{ field | addclass:"form-control" }} 
+                    </div>
+                </div>
+                
+                {% endfor %}
+   
+        <blockquote class="blockquote mb-0">
+            <footer class="blockquote-footer" Align=right>
+                {{ user.get_full_name }} in 
+                <cite title="Yatube">Yatube</cite>
+            </footer>
+        </blockquote>
+            <button type="submit" class="btn btn-primary">
+                {% if post.id %}
+                    Сохранить
+                {% else %}
+                    Добавить
+                {% endif %}
+            </button> 
+        </div>
+    </form>
+</div>
+
+{% endblock %}
+>>>>>>> caec63caee2c86f618678ac33916de06e5a95b81
