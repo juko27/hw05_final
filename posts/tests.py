@@ -9,12 +9,10 @@ import time
 from .models import Post, Group
 
 
-
 URLS = {'profile': ['user_name'], 
                 'index': [],
                 'post': ['user_name', '1'], 
                 'group': ['group']}
-
 
 
 class TestRegMethods(TestCase):
