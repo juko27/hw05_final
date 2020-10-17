@@ -3,8 +3,18 @@ from django.test.client import Client
 from django.contrib.auth.models import User
 from django.core.cache import cache 
 from django.urls import reverse
-from .models import Post, Group
+from django.test import override_settings
+from tempfile import NamedTemporaryFile, gettempdir
 import time
+from .models import Post, Group
+
+
+
+URLS = {'profile': ['user_name'], 
+                'index': [],
+                'post': ['user_name', '1'], 
+                'group': ['group']}
+
 
 class TestRegMethods(TestCase):
 
@@ -54,34 +64,31 @@ class TestPostMethods(TestCase):
             group=self.group
         )
         
-    def post_view(self, url, post = None):
+    def post_view(self, post = None):
         cache.clear()
-        if post is None: post = self.post
-        self.response = self.client.get(url)
-        if self.response.context.get("paginator"):
-            res = self.response.context["paginator"].object_list[0]
-        else:
-            res = self.response.context["post"]
-        return self.assertEqual(res, post)
+        for path in URLS:
+            if post is None: post = self.post
+            self.response = self.client.get(reverse(path, args = URLS[path]))
+            if self.response.context.get("paginator"):
+                res = self.response.context["paginator"].object_list[0]
+            else:
+                res = self.response.context["post"]
+            return self.assertEqual(res, post)
         
     def test_new_post_in_pages(self):
-        self.post_view("/")
-        self.post_view(f"/{self.user.username}/")
-        self.post_view(f"/{self.user.username}/{self.post.id}/")
-        self.post_view(f"/group/{self.group.slug}/")
+        self.post_view()
         
     def test_post_edit(self):
-        response = self.client.post(f"/{self.user.username}/{self.post.id}/edit/", 
+        self.client.post(reverse('post_edit', args = [self.user.username, self.post.id]),
             {'text': 'New text', 'group': self.group})
         post = Post.objects.get(id = self.post.id )
 
-        self.post_view("/", post)
-        self.post_view(f"/{self.user.username}/", post)
-        self.post_view(f"/{self.user.username}/{self.post.id}/", post)
+        self.post_view(post)
 
 
 class TestImageAndCacheMethods(TestCase):
 
+    @override_settings(MEDIA_ROOT=gettempdir())
     def setUp(self):
         self.client = Client()
         self.user = User.objects.create_user(
@@ -93,38 +100,36 @@ class TestImageAndCacheMethods(TestCase):
             description="description", 
             slug = "group"
         )
+        img = NamedTemporaryFile(suffix=".jpg").name
         self.post = Post.objects.create(
             text="Text", 
             author=self.user, 
-            group=self.group
+            group=self.group,
+            image=img
         )
-        with open('media/posts/2AxJIIjP-T0_fKCAWkr.jpg','rb') as img:
-            self.img_req = self.client.post(f"/{self.user.username}/{self.post.id}/edit/", {
-                'image': img
-            }) 
-
+    
     def test_img_in_pages(self):
-        URLS = {'profile': [self.user.username], 
-                'index': [],
-                'post': [self.user.username, self.post.id], 
-                'group': [self.group.slug]}
         for key, value in URLS.items():
             response = self.client.get(reverse(key, args=value))
             self.assertContains(response, '<img')
 
     def test_load_not_img_format(self):
-        with open('requirements.txt','r') as not_img:
-            post = self.client.post(f"/{self.user.username}/{self.post.id}/edit", {
-                'image': not_img
-            })
-        self.assertNotEqual(post.status_code, 200)
+        with NamedTemporaryFile(mode='w+b') as not_img:
+            not_img.write('abcdefg'.encode())
+            not_img.seek(0)
+            post = self.client.post(reverse('post_edit', 
+                        args = [self.user.username, self.post.id]), 
+                        {'image': not_img}) 
+        self.assertFormError(post, 'form', 'image', 
+            f'Загрузите правильное изображение.'
+            f' Файл, который вы загрузили, поврежден или не является изображением.')
 
     def test_cache(self):
         start = time.time()
-        response = self.client.get(reverse('index'))
+        self.client.get(reverse('index'))
         res1 = time.time() - start
 
         start_cache = time.time()
-        response_cache = self.client.get(reverse('index'))
+        self.client.get(reverse('index'))
         res2 = time.time() - start_cache
         self.assertTrue(res2 < res1)

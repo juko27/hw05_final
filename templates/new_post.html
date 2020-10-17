@@ -30,11 +30,12 @@
                         {{ field.label }} 
                     </label> 
                     <div class="col-md-9"> 
-                        {{ field | addclass:"form-control" }}  
+                        {{ field | addclass:"form-control" }} 
                     </div> 
                 </div> 
                  
                 {% endfor %} 
+                {{ form.image.errors }}
     
         <blockquote class="blockquote mb-0"> 
             <footer class="blockquote-footer" Align=right> 

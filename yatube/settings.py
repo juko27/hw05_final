@@ -135,3 +135,4 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
 } 
+CONTENT_TYPES = ['image']

@@ -37,7 +37,7 @@ def group_posts(request, slug):
  
 @login_required() 
 def new_post(request): 
-    form = PostForm(request.POST or None) 
+    form = PostForm(request.POST or None, files=request.FILES or None) 
     if request.method == 'POST': 
         if form.is_valid(): 
             post = form.save(commit=False) 
