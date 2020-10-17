@@ -16,6 +16,7 @@ URLS = {'profile': ['user_name'],
                 'group': ['group']}
 
 
+
 class TestRegMethods(TestCase):
 
     def setUp(self):
