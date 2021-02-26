@@ -24,18 +24,17 @@
   
       <!-- Отображение ссылки на комментарии -->
       {% if post.comments.exists %}
-      <div class="text-muted">
+      <a class="text-muted text-decoration-none" href="{% url 'post' post.author.username post.id %}">
         Комментариев: ({{ post.comments.count }})
-      </div>
+      </a>
       {% endif %}
       
       <div class="d-flex justify-content-between align-items-end" style="margin-top: 20px;">
         <div class="btn-group">
-         
+
           <a class="btn btn-sm btn-warning" href="{% url 'post' post.author.username post.id %}" role="button">
             Добавить комментарий
           </a>
-          
           <!-- Ссылка на редактирование поста для автора -->
           {% if user == post.author %}
           <a class="btn btn-sm btn-info" href="{% url 'post_edit' post.author.username post.id %}" role="button">

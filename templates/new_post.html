@@ -18,7 +18,7 @@
               action="{% url 'post_edit' request.user.username post.id %}" 
               enctype="multipart/form-data"> 
     {% else %} 
-        <form method="post" action="{% url 'new' %}"> 
+        <form method="post" action="{% url 'new' %}" enctype="multipart/form-data"> 
     {% endif %}  
         {% csrf_token %} 
         <div class="card-body"> 

@@ -9,24 +9,43 @@
         Пользователь: {{ user.username }}
         
         <span>
-            <link href="https://fonts.googleapis.com/css2?family=Ruslan+Display&display=swap" 
-            rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css2?family=Playfair+Display+SC&display=swap" rel="stylesheet">
             <style type="text/css">
-                nav {font-family: 'Ruslan Display', cursive;
-                      font-size: 22px}
+                nav {font-family: 'Playfair Display SC', serif;
+                      font-size: 18px}
             </style>
             
-            <a class="badge badge-pill badge-dark"  href="{% url 'new' %}">
-              <svg width="1em" height="1.2em" viewBox="0 0 16 16" 
+            <a class="badge badge-pill badge-dark" 
+            style="margin-top: 20px; margin-right: 20px; margin-left: 20px;" 
+            href="{% url 'new' %} ">
+              <svg width="1.2em" height="1.7em" viewBox="0 0 16 16" 
               class="bi bi-pencil-fill" fill="currentColor" 
               xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" 
                 d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
               </svg> Новая запись</a>
         </span>
-        
-        <a class="p-2 text-dark" href="{% url 'password_change' %}">Изменить пароль</a>
-        <a class="p-2 text-dark" href="{% url 'logout' %}">Выйти</a>
+        <div class="btn-group">
+           
+            <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" 
+            aria-haspopup="true" aria-expanded="false">
+            
+            <svg width="1.7em" height="1.7em" viewBox="0 0 16 16" class="bi bi-person-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+              </svg>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <a class="dropdown-header">{{ user.get_full_name }}</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item"href="{% url 'password_change' %}">Изменить пароль</a>
+              {% if user.is_superuser %}
+              <a class="dropdown-item" href="/admin">Конфигуратор</a>
+              {% endif %}
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="{% url 'logout' %}">Выйти</a>
+            </div>
+          </div>
+
         {% else %}
         <a class="p-2 text-dark" href="{% url 'login' %}">Войти</a> |
         <a class="p-2 text-dark" href="{% url 'signup' %}">Регистрация</a>

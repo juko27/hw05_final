@@ -14,6 +14,7 @@ SECRET_KEY = '5=bgoip!-e24gxsbs#ud%af!u#wb0jk8lw!&utavdv1%ckdd4u'
 DEBUG = True
 
 ALLOWED_HOSTS = [
+        "*",
         "localhost",
         "127.0.0.1",
         "[::1]",
@@ -35,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.flatpages',
     'sorl.thumbnail',
+    # 'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -45,6 +47,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
+]
+
+INTERNAL_IPS = [
+    
+    '127.0.0.1',
+   
 ]
 
 ROOT_URLCONF = 'yatube.urls'
@@ -109,7 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 

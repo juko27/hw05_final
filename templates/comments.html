@@ -14,19 +14,43 @@
         </div>
     </form>
 </div>
+{% else %}
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.0.4/js/all.js"></script>
+<script>
+$(function () {
+$('[data-toggle="popover"]').popover()
+})
+</script>
+<button type="button" class="btn btn-danger" 
+        data-toggle="popover" 
+        title="No pasarán" 
+        data-content="Для добавления комментариев авторизуйтесь">{% if post.comments.exists %}
+        А где добавить? {% else %} И где добавить? {% endif %}
+</button>
+<p></p>
 {% endif %}
-
-<!-- Комментарии -->
-{% for item in comments %}
-<div class="media card mb-4">
-    <div class="media-body card-body">
-        <h5 class="mt-0">
-            <a href="{% url 'profile' item.author.username %}"
-               name="comment_{{ item.id }}">
-                {{ item.author.username }}
-            </a>
-        </h5>
-        <p>{{ item.text | linebreaksbr }}</p>
+{% if post.comments.exists %}
+<div class="card">
+    <div class="card-header text-center text-muted" style="height: 2.7rem;">
+        КОММЕНТАРИИ: ({{ post.comments.count }})
+    </div>
+    
+    <div class="list-group list-group-flush">
+    {% for item in post.comments.all %}
+        <div class="media card mb-4 list-group-item">
+            <h5 class="mt-0">
+                <a href="{% url 'profile' item.author.username %}"
+                name="comment_{{ item.id }}">
+                    {{ item.author.username }}
+                </a>
+            </h5>
+            <p>{{ item.text | linebreaksbr }}</p>
+            <small class="text-muted">{{ item.created|date:"d M Y"}}</small>
+        </div>
+    {% endfor %}
     </div>
 </div>
-{% endfor %}
+{% endif %}

@@ -10,9 +10,9 @@ from .models import Post, Group, Follow
 from .forms import PostForm, CommentForm
 
 
-@cache_page(20, key_prefix='index_page')
+#@cache_page(20, key_prefix='index_page')
 def index(request):
-    post_list = Post.objects.select_related('group').all()
+    post_list = Post.objects.select_related('group', 'author').prefetch_related('comments').all()
     paginator = Paginator(post_list, 10)
 
     page_number = request.GET.get('page')
@@ -87,18 +87,29 @@ def post_exist(fn):
 @post_exist
 def post_view(request, username, post_id):
     profile = get_object_or_404(User, username=username)
-    posts_len = profile.posts.all().count()
-    post = Post.objects.get(id=post_id)
-    comments = post.comments.all()
-    form = CommentForm()
+    posts_len = profile.posts.count()
+    post = Post.objects.select_related('author').prefetch_related('comments').get(id=post_id)
     if profile != post.author:
         return redirect('profile', profile.username)
+    followers = Follow.objects.filter(author=profile).count()
+    follows = Follow.objects.filter(user=profile).count()
+    following = None
+    if request.user.id is not None: 
+        try:
+            Follow.objects.get(user=request.user, author=profile)
+            following = True
+        except Follow.DoesNotExist:
+            following = False
+    form = CommentForm()
+    
     return render(request, 'post.html', {
                         'post': post,
                         'profile': profile,
                         'posts': posts_len,
-                        'comments': comments,
-                        'form': form
+                        'form': form,
+                        'following': following,
+                        'followers': followers,
+                        'follows': follows
                     })
 
 
@@ -118,6 +129,11 @@ def post_edit(request, username, post_id):
                                     post_id=post_id) 
     return render(request, 'new_post.html', {'post': post, 
                                              'form': form})  
+
+
+def post_delete(request, username, post_id):
+    Post.objects.filter(id=post_id, author=request.user).delete()
+    return redirect('index')
 
 
 @login_required
@@ -151,7 +167,7 @@ def server_error(request):
 @login_required
 def follow_index(request):
     post_list = Post.objects.filter(
-        author__following__user=request.user)
+        author__following__user=request.user).select_related('group').prefetch_related('comments')
       
     paginator = Paginator(post_list, 10)  
     page_number = request.GET.get('page')   

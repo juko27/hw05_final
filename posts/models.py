@@ -40,6 +40,8 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
+    class Meta:
+        ordering = ('-created',)
     post =  models.ForeignKey(Post,
                               verbose_name='Публикация',
                               on_delete=models.CASCADE,
